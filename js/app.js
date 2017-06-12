@@ -1,3 +1,5 @@
+'use strict';
+
 var pike = {
   name: '1st and Pike',
   min: 23,
@@ -6,7 +8,7 @@ var pike = {
   customersPerHour : function() {
     return(Math.floor((Math.random() * (this.max + 1 - this.min) + this.min) * this.ave));
   }
-}
+};
 
 var seatac = {
   name: 'SeaTac Airport',
@@ -16,7 +18,7 @@ var seatac = {
   customersPerHour : function() {
     return(Math.floor((Math.random() * (this.max + 1 - this.min) + this.min) * this.ave));
   }
-}
+};
 
 var seattleCenter = {
   name: 'Seattle Center',
@@ -26,7 +28,7 @@ var seattleCenter = {
   customersPerHour : function() {
     return(Math.floor((Math.random() * (this.max + 1 - this.min) + this.min) * this.ave));
   }
-}
+};
 
 var capitol = {
   name: 'Capitol Hill',
@@ -36,7 +38,7 @@ var capitol = {
   customersPerHour : function() {
     return(Math.floor((Math.random() * (this.max + 1 - this.min) + this.min) * this.ave));
   }
-}
+};
 
 var alki = {
   name: 'Alki',
@@ -46,25 +48,38 @@ var alki = {
   customersPerHour : function() {
     return(Math.floor((Math.random() * (this.max + 1 - this.min) + this.min) * this.ave));
   }
-}
+};
 
 function predictDay(store) {
+  var parentElement = document.getElementById('salmonSales');
+  var article = document.createElement('article');
+  parentElement.appendChild(article);
+  var h2 = document.createElement('h2');
+  h2.textContent = store.name;
+  article.appendChild(h2);
   var hour = 6;
   var meridiem = 'am: ';
   console.log(store.name);
   var total = 0;
-  for (var i=0; i < 15; i++) {
-    sale = store.customersPerHour();
+  var ul = document.createElement('ul');
+  article.appendChild(ul);
+  for (var i = 0; i < 15; i++) {
+    var sale = store.customersPerHour();
     if (hour > 12) {
       hour -= 12;
       meridiem = 'pm: ';
     }
-    console.log(hour + meridiem + sale + ' cookies');
-    total += sale
+    var li = document.createElement('li');
+    li.textContent = hour + meridiem + sale + ' cookies';
+    ul.appendChild(li);
+    total += sale;
     hour++;
   }
-  console.log('Total: ' + total + ' cookies\n\n')
+  var p = document.createElement('p');
+  p.textContent = 'Total: ' + total + ' cookies';
+  article.appendChild(p);
 }
+
 
 predictDay(pike);
 predictDay(seatac);
