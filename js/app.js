@@ -1,5 +1,3 @@
-'use strict';
-
 var pike = {
   name: '1st and Pike',
   min: 23,
@@ -69,3 +67,7 @@ function predictDay(store) {
 }
 
 predictDay(pike);
+predictDay(seatac);
+predictDay(seattleCenter);
+predictDay(capitol);
+predictDay(alki);
