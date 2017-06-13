@@ -28,7 +28,19 @@ var seattleCenter = new Store('Seattle Center', 11, 38, 3.7);
 var capitol = new Store('Capitol Hill', 20, 38, 2.3);
 var alki = new Store('Alki', 2, 16, 4.6);
 
+//generate
+var times = [''];
+for (var i = 6; i < 21; i++) {
+  var meridien = 'am';
+  if (i > 12) {
+    meridien = 'pm';
+  }
+  times.push(i - (i % 12) + ':00' + meridien);
+}
 
+for (i in stores) {
+
+}
 
 function predictDay(store) {
   var hour = 6;
