@@ -66,7 +66,7 @@ var alki = {
   ave: 4.6,
   storeLog: [],
   customersPerHour : function() {
-    return(Math.floor((Math.random() * (this.max + 1 - this.min) + this.min) * this.ave));
+    return(Math.round((Math.random() * (this.max + 1 - this.min) + this.min) * this.ave));
   }
 };
 
