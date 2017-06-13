@@ -3,7 +3,8 @@
 var pike = {
   name: '1st and Pike',
   image: 'https://c2.staticflickr.com/4/3282/5836876205_38b0b01a78_n.jpg',
-  image_title: 'source: https://www.flickr.com/photos/rickvaughn/5836876205/sizes/l',
+  image_link: 'https://www.flickr.com/photos/rickvaughn/5836876205/sizes/l',
+  caption: 'Some rights reserved by saipanrick',
   min: 23,
   max: 65,
   ave: 6.3,
@@ -16,7 +17,8 @@ var pike = {
 var seatac = {
   name: 'SeaTac Airport',
   image: 'https://c2.staticflickr.com/6/5454/6903623418_b84631d6b2_n.jpg',
-  image_title: 'source: https://www.flickr.com/photos/avgeekjoe/6903623418/sizes/l',
+  image_link: 'https://www.flickr.com/photos/avgeekjoe/6903623418/sizes/l',
+  caption: 'Some rights reserved by AvgeekJoe',
   min: 3,
   max: 24,
   ave: 1.2,
@@ -29,7 +31,8 @@ var seatac = {
 var seattleCenter = {
   name: 'Seattle Center',
   image: 'https://c1.staticflickr.com/3/2048/2167825832_5ea784c8b5_n.jpg',
-  image_title: 'source: https://www.flickr.com/photos/sean_oneill/2167825832/sizes/l',
+  image_link: 'https://www.flickr.com/photos/sean_oneill/2167825832/sizes/l',
+  caption: 'Some rights reserved by Shutterbug Fotos',
   min: 11,
   max: 38,
   ave: 3.7,
@@ -41,8 +44,9 @@ var seattleCenter = {
 
 var capitol = {
   name: 'Capitol Hill',
-  image: 'https://c2.staticflickr.com/8/7362/14185998831_31e0eac9bb_n.jpg',
-  image_title: 'source: https://www.flickr.com/photos/wrymuffin/14185998831/sizes/l',
+  image: 'https://c2.staticflickr.com/6/5521/9672770640_7b72c38a62_n.jpg',
+  image_link: 'https://www.flickr.com/photos/wiredforsound23/9672770640/sizes/l',
+  caption: ' Some rights reserved by wiredforlego',
   min: 20,
   max: 38,
   ave: 2.3,
@@ -54,8 +58,9 @@ var capitol = {
 
 var alki = {
   name: 'Alki',
-  image: 'https://c1.staticflickr.com/5/4108/5040991402_1b958e931c_n.jpg',
-  image_title: 'source: https://www.flickr.com/photos/22286227@N05/5040991402/sizes/l',
+  image: 'https://c2.staticflickr.com/4/3338/3553891900_f6775d5484_n.jpg',
+  image_link: 'https://www.flickr.com/photos/dcoetzee/3553891900/sizes/l',
+  caption: 'Some rights reserved by D Coetzee',
   min: 2,
   max: 16,
   ave: 4.6,
@@ -76,11 +81,13 @@ function predictDay(store) {
   var h2 = document.createElement('h2');
   h2.textContent = store.name;
   article.appendChild(h2);
+  var a = document.createElement('a');
+  article.appendChild(a);
+  a.setAttribute('href', store.image_link);
   var img = document.createElement('img');
   img.setAttribute('src', store.image);
-  img.setAttribute('title', store.image_title);
-  article.appendChild(img);
-  console.log(store.name);
+  img.setAttribute('title', store.caption);
+  a.appendChild(img);
   var ul = document.createElement('ul');
   article.appendChild(ul);
   for (var i = 0; i < 15; i++) {
@@ -88,6 +95,8 @@ function predictDay(store) {
     logger.push(sale);
     if (hour > 12) {
       hour -= 12;
+    }
+    if (hour > 11) {
       meridiem = 'pm: ';
     }
     var li = document.createElement('li');
