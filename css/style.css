@@ -1,6 +1,38 @@
 body {
+  background-color: salmon;
+}
+
+* {
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+}
+
+th {
+  min-width: 60px;
+}
+
+table {
   background-color: white;
 }
 
-. {
+td {
+  border: 1px solid salmon;
+  text-align: center;
+  height: 50px;
+}
+
+/* https://stackoverflow.com/questions/13955163/imitating-a-blink-tag-with-css3-animations*/
+
+.blink {
+  animation: blink-animation 1s steps(5, start) infinite;
+  -webkit-animation: blink-animation 1s steps(5, start) infinite;
+}
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
 }
