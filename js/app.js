@@ -40,12 +40,13 @@ function Store (name, min, max, ave) {
   stores.push(this);
 };
 
+
 Store.prototype.render = function(table, maximum) {
   var row = document.createElement('tr');
   for (var i = 0; i < times.length; i++) {
     var cell = document.createElement('td');
     // if content is text, add bold
-    if (isNaN(this.savedLog[i])) {
+    if (i == 0) {
       var span = document.createElement('span');
       span.textContent = this.savedLog[i];
       span.setAttribute('style', 'font-weight: bold');
@@ -71,7 +72,7 @@ Store.prototype.render = function(table, maximum) {
 };
 
 
-
+//this is necessary to create a color meter later on
 for (var i = 0; i < stores.length; i++) {
   // this is to find the individual store with the highest sales potential
   if (stores[i].max * stores[i].ave > storeMax) {
@@ -128,13 +129,11 @@ function generateFooter(table, maximum) {
   var row = document.createElement('tr');
   for (var i = 0; i < times.length; i++) {
     var cell = document.createElement('td');
-    // if content is text, add bold
     var span = document.createElement('span');
     span.textContent = totals[i];
     span.setAttribute('style', 'font-weight: bold');
     cell.appendChild(span);
     if (0 < i && i < 16) {
-      // success provides visual indicator of how well the stores did relative to the maximum possible
       var success = totals[i] / maximum;
       cell.setAttribute('style', 'background-color: rgba(250, 128, 114, ' + success + ')');
       var div = document.createElement('div');
