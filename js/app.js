@@ -12,10 +12,14 @@ function Store (name, min, max, ave) {
   this.savedLog = [];
   // newDay is a function that will reset the savedLog
   this.newDay = function() {
-    this.savedLog = [];
+    var total = 0;
+    this.savedLog = [this.name];
     for (var i = 0; i < 15; i++) {
-      this.savedLog.push(Math.round((Math.random() * (this.max - this.min) + this.min) * this.ave));
+      var sale = Math.round((Math.random() * (this.max - this.min) + this.min) * this.ave);
+      this.savedLog.push(sale);
+      total += sale;
     }
+    this.savedLog.push(total);
     return(this.savedLog);
   };
   this.newDay();
@@ -28,64 +32,31 @@ var seattleCenter = new Store('Seattle Center', 11, 38, 3.7);
 var capitol = new Store('Capitol Hill', 20, 38, 2.3);
 var alki = new Store('Alki', 2, 16, 4.6);
 
-//generate
-var times = [''];
-for (var i = 6; i < 21; i++) {
-  var meridien = 'am';
-  if (i > 12) {
-    meridien = 'pm';
+//generate hours
+var times = ['', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', 'Total:'];
+
+var parentElement = document.getElementById('salmonSales');
+
+var article = document.createElement('article');
+parentElement.appendChild(article);
+
+
+var table = document.createElement('table');
+
+function generateRow(rowArray, element, table) {
+  var row = document.createElement('tr');
+  for (var i = 0; i < times.length; i++) {
+    var cell = document.createElement(element);
+    cell.textContent = rowArray[i];
+    row.appendChild(cell);
   }
-  times.push(i - (i % 12) + ':00' + meridien);
+  table.appendChild(row);
+};
+
+generateRow(times, 'th', table);
+
+for (var i = 0; i < stores.length; i++) {
+  generateRow(stores[i].savedLog, 'td', table);
 }
 
-for (i in stores) {
-
-}
-
-function predictDay(store) {
-  var hour = 6;
-  var meridiem = 'am: ';
-  var total = 0;
-  var logger = [];
-  var parentElement = document.getElementById('salmonSales');
-  var article = document.createElement('article');
-  parentElement.appendChild(article);
-  var h2 = document.createElement('h2');
-  h2.textContent = store.name;
-  article.appendChild(h2);
-  var a = document.createElement('a');
-  article.appendChild(a);
-  a.setAttribute('href', store.image_link);
-  var img = document.createElement('img');
-  img.setAttribute('src', store.image);
-  img.setAttribute('title', store.caption);
-  a.appendChild(img);
-  var ul = document.createElement('ul');
-  article.appendChild(ul);
-  for (var i = 0; i < 15; i++) {
-    var sale = store.customersPerHour();
-    logger.push(sale);
-    if (hour > 12) {
-      hour -= 12;
-    }
-    if (hour > 11) {
-      meridiem = 'pm: ';
-    }
-    var li = document.createElement('li');
-    li.textContent = hour + meridiem + sale + ' cookies';
-    ul.appendChild(li);
-    total += sale;
-    hour++;
-  }
-  var p = document.createElement('p');
-  p.textContent = 'Total: ' + total + ' cookies';
-  article.appendChild(p);
-  store.storeLog = logger;
-}
-
-
-predictDay(pike);
-predictDay(seatac);
-predictDay(seattleCenter);
-predictDay(capitol);
-predictDay(alki);
+article.appendChild(table);
