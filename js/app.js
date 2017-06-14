@@ -82,14 +82,7 @@ for (var i = 0; i < stores.length; i++) {
 }
 totalMax = Math.round(totalMax);
 
-//generates an array with the totals for any given hour
-var totals = ['Totals: '];
-for (i = 1; i < 17; i++) {
-  totals.push(0);
-  for (var j = 0; j < stores.length; j++) {
-    totals[i] += stores[j].savedLog[i];
-  }
-}
+
 
 //this is where we start the html portion
 var parentElement = document.getElementById('salmonSales');
@@ -97,23 +90,52 @@ var article = document.createElement('article');
 parentElement.appendChild(article);
 var table = document.createElement('table');
 
+
+// renders header
+generateHeader(times, table);
+
+// renders individual stores
+for (i = 0; i < stores.length; i++) {
+  stores[i].render(table, storeMax);
+};
+
+//renders total
+generateFooter(table, totalMax);
+
+article.appendChild(table);
+
 //converts array into table row
-function generateRow(rowArray, element, table, maximum) {
+function generateHeader(rowArray, table) {
   var row = document.createElement('tr');
   for (var i = 0; i < times.length; i++) {
-    var cell = document.createElement(element);
-    // if content is text, add bold
-    if (isNaN(rowArray[i])) {
-      var span = document.createElement('span');
-      span.textContent = rowArray[i];
-      span.setAttribute('style', 'font-weight: bold');
-      cell.appendChild(span);
-    } else {
-      cell.textContent = rowArray[i];
+    var cell = document.createElement('th');
+    cell.textContent = rowArray[i];
+    row.appendChild(cell);
+  }
+  table.appendChild(row);
+};
+
+//converts array into table row
+function generateFooter(table, maximum) {
+  //generates an array with the totals for any given hour
+  var totals = ['Totals: '];
+  for (i = 1; i < 17; i++) {
+    totals.push(0);
+    for (var j = 0; j < stores.length; j++) {
+      totals[i] += stores[j].savedLog[i];
     }
-    if (rowArray[i] && !isNaN(rowArray[i]) && i < 16) {
+  }
+  var row = document.createElement('tr');
+  for (var i = 0; i < times.length; i++) {
+    var cell = document.createElement('td');
+    // if content is text, add bold
+    var span = document.createElement('span');
+    span.textContent = totals[i];
+    span.setAttribute('style', 'font-weight: bold');
+    cell.appendChild(span);
+    if (0 < i && i < 16) {
       // success provides visual indicator of how well the stores did relative to the maximum possible
-      var success = rowArray[i] / maximum;
+      var success = totals[i] / maximum;
       cell.setAttribute('style', 'background-color: rgba(250, 128, 114, ' + success + ')');
       var div = document.createElement('div');
       cell.appendChild(div);
@@ -127,18 +149,3 @@ function generateRow(rowArray, element, table, maximum) {
   }
   table.appendChild(row);
 };
-
-// renders header
-generateRow(times, 'th', table, null);
-
-// renders individual stores
-for (i = 0; i < stores.length; i++) {
-  generateRow(stores[i].savedLog, 'td', table, storeMax);
-}
-
-pike.render(table, storeMax);
-
-//renders total
-generateRow(totals, 'td', table, totalMax);
-
-article.appendChild(table);
