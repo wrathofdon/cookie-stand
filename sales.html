@@ -10,6 +10,22 @@
       <h1>These are your sales</h1>
     </header>
     <main>
+
+      <form id="addStore">
+        <fieldset>
+          <legend>Add New Store</legend>
+          <label>Location</label>
+          <input name="location" type="text"required="required"/>
+          <label>Minimum Customers</label>
+          <input name="minimum" type="number" required="required"/>
+          <label>Maximum Customers</label>
+          <input name="maxCust" type="number" required="required"/>
+          <label>Average Cookies Per Sale</label>
+          <input name="aveCookies" type="number" step=".1" required="required"/>
+        </fieldset>
+        <button type="submit">Submit</button>
+      </form>
+
       <div id="salmonSales">
       </div>
     </main>

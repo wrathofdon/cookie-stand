@@ -2,7 +2,8 @@
 
 // array of all the stores, will be added via construction
 var stores = [];
-var times = ['', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', 'Location Total:'];
+var storeNames = [];
+var times = ['', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', 'Location Total:'];
 
 // ignore the linter issues, functions are called via for loop
 var pike = new Store('1st and Pike', 23, 65, 6.3);
@@ -16,8 +17,9 @@ var storeMax = 0;
 var totalMax = 0;
 
 
-function Store (name, min, max, ave) {
-  this.name = name;
+function Store (location, min, max, ave) {
+  this.location = location;
+  storeNames.push(this.location.toLowerCase());
   this.min = min;
   this.max = max;
   this.ave = ave;
@@ -26,8 +28,8 @@ function Store (name, min, max, ave) {
   // newDay is a function that can reset the savedLog if necessary
   this.newDay = function() {
     var total = 0;
-    this.savedLog = [this.name];
-    for (var i = 0; i < 15; i++) {
+    this.savedLog = [this.location];
+    for (var i = 0; i < 14; i++) {
       var sale = Math.round((Math.random() * (this.max - this.min) + this.min) * this.ave);
       this.savedLog.push(sale);
       total += sale;
@@ -54,7 +56,7 @@ Store.prototype.render = function(table, maximum) {
     } else {
       cell.textContent = this.savedLog[i];
     }
-    if (0 < i && i < 16) {
+    if (0 < i && i < 15) {
       // success provides visual indicator of how well the stores did relative to the maximum possible
       var success = this.savedLog[i] / maximum;
       cell.setAttribute('style', 'background-color: rgba(250, 128, 114, ' + success + ')');
@@ -120,7 +122,7 @@ function generateHeader(rowArray, table) {
 function generateFooter(table, maximum) {
   //generates an array with the totals for any given hour
   var totals = ['Totals: '];
-  for (i = 1; i < 17; i++) {
+  for (i = 1; i < 16; i++) {
     totals.push(0);
     for (var j = 0; j < stores.length; j++) {
       totals[i] += stores[j].savedLog[i];
@@ -133,7 +135,7 @@ function generateFooter(table, maximum) {
     span.textContent = totals[i];
     span.setAttribute('style', 'font-weight: bold');
     cell.appendChild(span);
-    if (0 < i && i < 16) {
+    if (0 < i && i < 15) {
       var success = totals[i] / maximum;
       cell.setAttribute('style', 'background-color: rgba(250, 128, 114, ' + success + ')');
       var div = document.createElement('div');
@@ -148,3 +150,27 @@ function generateFooter(table, maximum) {
   }
   table.appendChild(row);
 };
+
+
+var addStore = document.getElementById('addStore');
+// event listeners ened to know: what event do they care about, and what do they want to do when it happens.
+addStore.addEventListener('submit',
+  function (event) {
+    var location = event.target.location.value;
+    var minCust = event.target.minCust.value;
+    var maxCust = event.target.maxCust.value;
+    var aveCookies = parseFloat(event.target.aveCookies.value);
+    if (storeNames.indexOf(location.toLowerCase()) > -1) {
+      event.preventDefault();
+      alert('That\'s already a store!');
+    } else if (minCust > maxCust) {
+      event.preventDefault();
+      alert('You minimum and maximum might be backwards!');
+    } else {
+      event.preventDefault();
+      var newStore = new Store(location, minCust, maxCust, aveCookies);
+      newStore.render();
+      addStore.reset();
+    }
+  }
+);
