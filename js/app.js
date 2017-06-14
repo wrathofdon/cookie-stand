@@ -1,119 +1,151 @@
 'use strict';
 
-var pike = {
-  name: '1st and Pike',
-  image: 'https://c2.staticflickr.com/4/3282/5836876205_38b0b01a78_n.jpg',
-  image_link: 'https://www.flickr.com/photos/rickvaughn/5836876205/sizes/l',
-  caption: 'Some rights reserved by saipanrick',
-  min: 23,
-  max: 65,
-  ave: 6.3,
-  storeLog: [],
-  customersPerHour : function() {
-    return(Math.floor((Math.random() * (this.max + 1 - this.min) + this.min) * this.ave));
-  }
-};
+// array of all the stores, will be added via construction
+var stores = [];
+var times = ['', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', 'Location Total:'];
 
-var seatac = {
-  name: 'SeaTac Airport',
-  image: 'https://c2.staticflickr.com/6/5454/6903623418_b84631d6b2_n.jpg',
-  image_link: 'https://www.flickr.com/photos/avgeekjoe/6903623418/sizes/l',
-  caption: 'Some rights reserved by AvgeekJoe',
-  min: 3,
-  max: 24,
-  ave: 1.2,
-  storeLog: [],
-  customersPerHour : function() {
-    return(Math.floor((Math.random() * (this.max + 1 - this.min) + this.min) * this.ave));
-  }
-};
+// ignore the linter issues, functions are called via for loop
+var pike = new Store('1st and Pike', 23, 65, 6.3);
+var seatac = new Store('SeaTac Airport', 3, 24, 1.2);
+var seattleCenter = new Store('Seattle Center', 11, 38, 3.7);
+var capitol = new Store('Capitol Hill', 20, 38, 2.3);
+var alki = new Store('Alki', 2, 16, 4.6);
 
-var seattleCenter = {
-  name: 'Seattle Center',
-  image: 'https://c1.staticflickr.com/3/2048/2167825832_5ea784c8b5_n.jpg',
-  image_link: 'https://www.flickr.com/photos/sean_oneill/2167825832/sizes/l',
-  caption: 'Some rights reserved by Shutterbug Fotos',
-  min: 11,
-  max: 38,
-  ave: 3.7,
-  storeLog: [],
-  customersPerHour : function() {
-    return(Math.floor((Math.random() * (this.max + 1 - this.min) + this.min) * this.ave));
-  }
-};
+// calculates the maximum number of cookies sold per day
+var storeMax = 0;
+var totalMax = 0;
 
-var capitol = {
-  name: 'Capitol Hill',
-  image: 'https://c2.staticflickr.com/6/5521/9672770640_7b72c38a62_n.jpg',
-  image_link: 'https://www.flickr.com/photos/wiredforsound23/9672770640/sizes/l',
-  caption: ' Some rights reserved by wiredforlego',
-  min: 20,
-  max: 38,
-  ave: 2.3,
-  storeLog: [],
-  customersPerHour : function() {
-    return(Math.floor((Math.random() * (this.max + 1 - this.min) + this.min) * this.ave));
-  }
-};
 
-var alki = {
-  name: 'Alki',
-  image: 'https://c2.staticflickr.com/4/3338/3553891900_f6775d5484_n.jpg',
-  image_link: 'https://www.flickr.com/photos/dcoetzee/3553891900/sizes/l',
-  caption: 'Some rights reserved by D Coetzee',
-  min: 2,
-  max: 16,
-  ave: 4.6,
-  storeLog: [],
-  customersPerHour : function() {
-    return(Math.round((Math.random() * (this.max + 1 - this.min) + this.min) * this.ave));
-  }
-};
-
-function predictDay(store) {
-  var hour = 6;
-  var meridiem = 'am: ';
-  var total = 0;
-  var logger = [];
-  var parentElement = document.getElementById('salmonSales');
-  var article = document.createElement('article');
-  parentElement.appendChild(article);
-  var h2 = document.createElement('h2');
-  h2.textContent = store.name;
-  article.appendChild(h2);
-  var a = document.createElement('a');
-  article.appendChild(a);
-  a.setAttribute('href', store.image_link);
-  var img = document.createElement('img');
-  img.setAttribute('src', store.image);
-  img.setAttribute('title', store.caption);
-  a.appendChild(img);
-  var ul = document.createElement('ul');
-  article.appendChild(ul);
-  for (var i = 0; i < 15; i++) {
-    var sale = store.customersPerHour();
-    logger.push(sale);
-    if (hour > 12) {
-      hour -= 12;
+function Store (name, min, max, ave) {
+  this.name = name;
+  this.min = min;
+  this.max = max;
+  this.ave = ave;
+  // savedLog will be set at the end
+  this.savedLog = [];
+  // newDay is a function that can reset the savedLog if necessary
+  this.newDay = function() {
+    var total = 0;
+    this.savedLog = [this.name];
+    for (var i = 0; i < 15; i++) {
+      var sale = Math.round((Math.random() * (this.max - this.min) + this.min) * this.ave);
+      this.savedLog.push(sale);
+      total += sale;
     }
-    if (hour > 11) {
-      meridiem = 'pm: ';
+    this.savedLog.push(total);
+    return(this.savedLog);
+  };
+  this.newDay();
+  // store is added to array on line 4
+  stores.push(this);
+};
+
+Store.prototype.render = function(table, maximum) {
+  var row = document.createElement('tr');
+  for (var i = 0; i < times.length; i++) {
+    var cell = document.createElement('td');
+    // if content is text, add bold
+    if (isNaN(this.savedLog[i])) {
+      var span = document.createElement('span');
+      span.textContent = this.savedLog[i];
+      span.setAttribute('style', 'font-weight: bold');
+      cell.appendChild(span);
+    } else {
+      cell.textContent = this.savedLog[i];
     }
-    var li = document.createElement('li');
-    li.textContent = hour + meridiem + sale + ' cookies';
-    ul.appendChild(li);
-    total += sale;
-    hour++;
+    if (0 < i && i < 16) {
+      // success provides visual indicator of how well the stores did relative to the maximum possible
+      var success = this.savedLog[i] / maximum;
+      cell.setAttribute('style', 'background-color: rgba(250, 128, 114, ' + success + ')');
+      var div = document.createElement('div');
+      cell.appendChild(div);
+      var img = document.createElement('img');
+      img.setAttribute('src', 'images/salmon-small.png');
+      img.setAttribute('width', 60 * success);
+      div.appendChild(img);
+      cell.appendChild(div);
+    }
+    row.appendChild(cell);
   }
-  var p = document.createElement('p');
-  p.textContent = 'Total: ' + total + ' cookies';
-  article.appendChild(p);
-  store.storeLog = logger;
+  table.appendChild(row);
+};
+
+
+
+for (var i = 0; i < stores.length; i++) {
+  // this is to find the individual store with the highest sales potential
+  if (stores[i].max * stores[i].ave > storeMax) {
+    storeMax = stores[i].max * stores[i].ave;
+  }
+  // this will find the maximum sales potential for all stores combined
+  totalMax += stores[i].max * stores[i].ave;
 }
+totalMax = Math.round(totalMax);
 
 
-predictDay(pike);
-predictDay(seatac);
-predictDay(seattleCenter);
-predictDay(capitol);
-predictDay(alki);
+
+//this is where we start the html portion
+var parentElement = document.getElementById('salmonSales');
+var article = document.createElement('article');
+parentElement.appendChild(article);
+var table = document.createElement('table');
+
+
+// renders header
+generateHeader(times, table);
+
+// renders individual stores
+for (i = 0; i < stores.length; i++) {
+  stores[i].render(table, storeMax);
+};
+
+//renders total
+generateFooter(table, totalMax);
+
+article.appendChild(table);
+
+//converts array into table row
+function generateHeader(rowArray, table) {
+  var row = document.createElement('tr');
+  for (var i = 0; i < times.length; i++) {
+    var cell = document.createElement('th');
+    cell.textContent = rowArray[i];
+    row.appendChild(cell);
+  }
+  table.appendChild(row);
+};
+
+//converts array into table row
+function generateFooter(table, maximum) {
+  //generates an array with the totals for any given hour
+  var totals = ['Totals: '];
+  for (i = 1; i < 17; i++) {
+    totals.push(0);
+    for (var j = 0; j < stores.length; j++) {
+      totals[i] += stores[j].savedLog[i];
+    }
+  }
+  var row = document.createElement('tr');
+  for (var i = 0; i < times.length; i++) {
+    var cell = document.createElement('td');
+    // if content is text, add bold
+    var span = document.createElement('span');
+    span.textContent = totals[i];
+    span.setAttribute('style', 'font-weight: bold');
+    cell.appendChild(span);
+    if (0 < i && i < 16) {
+      // success provides visual indicator of how well the stores did relative to the maximum possible
+      var success = totals[i] / maximum;
+      cell.setAttribute('style', 'background-color: rgba(250, 128, 114, ' + success + ')');
+      var div = document.createElement('div');
+      cell.appendChild(div);
+      var img = document.createElement('img');
+      img.setAttribute('src', 'images/salmon-small.png');
+      img.setAttribute('width', 60 * success);
+      div.appendChild(img);
+      cell.appendChild(div);
+    }
+    row.appendChild(cell);
+  }
+  table.appendChild(row);
+};
