@@ -2,7 +2,7 @@
 
 // array of all the stores, will be added via construction
 var stores = [];
-var times = ['', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', 'Total:'];
+var times = ['', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', 'Location Total:'];
 
 // ignore the linter issues, functions are called via for loop
 var pike = new Store('1st and Pike', 23, 65, 6.3);
@@ -39,6 +39,37 @@ function Store (name, min, max, ave) {
   // store is added to array on line 4
   stores.push(this);
 };
+
+Store.prototype.render = function(table, maximum) {
+  var row = document.createElement('tr');
+  for (var i = 0; i < times.length; i++) {
+    var cell = document.createElement('td');
+    // if content is text, add bold
+    if (isNaN(this.savedLog[i])) {
+      var span = document.createElement('span');
+      span.textContent = this.savedLog[i];
+      span.setAttribute('style', 'font-weight: bold');
+      cell.appendChild(span);
+    } else {
+      cell.textContent = this.savedLog[i];
+    }
+    if (0 < i && i < 16) {
+      // success provides visual indicator of how well the stores did relative to the maximum possible
+      var success = this.savedLog[i] / maximum;
+      cell.setAttribute('style', 'background-color: rgba(250, 128, 114, ' + success + ')');
+      var div = document.createElement('div');
+      cell.appendChild(div);
+      var img = document.createElement('img');
+      img.setAttribute('src', 'images/salmon-small.png');
+      img.setAttribute('width', 60 * success);
+      div.appendChild(img);
+      cell.appendChild(div);
+    }
+    row.appendChild(cell);
+  }
+  table.appendChild(row);
+};
+
 
 
 for (var i = 0; i < stores.length; i++) {
@@ -104,6 +135,8 @@ generateRow(times, 'th', table, null);
 for (i = 0; i < stores.length; i++) {
   generateRow(stores[i].savedLog, 'td', table, storeMax);
 }
+
+pike.render(table, storeMax);
 
 //renders total
 generateRow(totals, 'td', table, totalMax);
