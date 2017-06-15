@@ -2,7 +2,8 @@
 
 // array of all the stores, will be added via construction
 var storeLocations = [];
-var tbody;
+var storeTotals = ['Totals', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+var tbody; var thead; var tfoot;
 var times = ['', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', 'Location Total:'];
 var storeMax = 0;
 var totalMax = 0;
@@ -37,8 +38,10 @@ function Store (location, min, max, ave) {
       var sale = Math.round((Math.random() * (this.max - this.min) + this.min) * this.ave);
       this.savedLog.push(sale);
       total += sale;
+      storeTotals[i + 1] += sale;
     }
     this.savedLog.push(total);
+    storeTotals[15] += total;
     return(this.savedLog);
   };
   this.newDay();
@@ -61,12 +64,12 @@ Store.prototype.render = function(tbody, maximum) {
     if (0 < i && i < 15) {
       // success provides visual indicator of how well the stores did relative to the maximum possible
       var success = this.savedLog[i] / maximum;
-      cell.setAttribute('style', 'background-color: rgba(250, 128, 114, ' + success + ')');
+      cell.setAttribute('style', 'background-color: rgba(255, 100, 75, ' + success + ')');
       var div = document.createElement('div');
       cell.appendChild(div);
       var img = document.createElement('img');
       img.setAttribute('src', 'images/salmon-small.png');
-      img.setAttribute('width', 60 * success);
+      img.setAttribute('width', 60 * Math.pow(success, .8));
       div.appendChild(img);
       cell.appendChild(div);
     }
@@ -101,7 +104,7 @@ article.appendChild(table);
 
 //converts array into table row
 function generateHeader(rowArray, table) {
-  var thead = document.createElement('thead');
+  thead = document.createElement('thead');
   var row = document.createElement('tr');
   for (var i = 0; i < times.length; i++) {
     var cell = document.createElement('th');
@@ -112,29 +115,26 @@ function generateHeader(rowArray, table) {
 };
 
 //converts array into table row
-function generateFooter(table, maximum) {
-  var tfoot = document.createElement('tfoot');
+function generateFooter(table) {
+  tfoot = document.createElement('tfoot');
+  tfoot.setAttribute('style', 'color: #990000');
+  tfoot.innerHTML = '';
   //generates an array with the totals for any given hour
-  var totals = ['Totals: '];
-  for (i = 1; i < 16; i++) {
-    totals.push(0);
-    for (var j = 0; j < stores.length; j++) {
-      totals[i] += stores[j].savedLog[i];}}
   var row = document.createElement('tr');
   for (var i = 0; i < times.length; i++) {
     var cell = document.createElement('td');
     var span = document.createElement('span');
-    span.textContent = totals[i];
+    span.textContent = storeTotals[i];
     span.setAttribute('style', 'font-weight: bold');
     cell.appendChild(span);
     if (0 < i && i < 15) {
-      var success = totals[i] / maximum;
+      var success = storeTotals[i] / totalMax;
       cell.setAttribute('style', 'background-color: rgba(255, 100, 80, ' + success + ')');
       var div = document.createElement('div');
       cell.appendChild(div);
       var img = document.createElement('img');
       img.setAttribute('src', 'images/salmon-small.png');
-      img.setAttribute('width', 60 * success);
+      img.setAttribute('width', 60 * Math.pow(success, .75));
       div.appendChild(img);
       cell.appendChild(div);
     }
@@ -167,6 +167,7 @@ addStore.addEventListener('submit',
       var newStore = new Store(location, minCust, maxCust, aveCookies);
       newStore.render(tbody, storeMax);
       addStore.reset();
+      generateFooter(table);
     }
   }
 );
