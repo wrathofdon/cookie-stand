@@ -2,6 +2,16 @@ body {
   background-color: salmon;
 }
 
-. {
-  font-family: comic-sans;
+th {
+  min-width: 60px;
+}
+
+table {
+  background-color: white;
+}
+
+td {
+  border: 1px solid salmon;
+  text-align: center;
+  height: 50px;
 }
