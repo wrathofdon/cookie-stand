@@ -2,7 +2,7 @@
 
 // array of all the stores, will be added via construction
 var storeLocations = [];
-var storeTotals = ['Totals', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+var storeTotals = ['Hourly Totals', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 var tbody; var thead; var tfoot;
 var times = ['', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', 'Location Total:'];
 var storeMax = 0;
@@ -118,7 +118,6 @@ function generateHeader(rowArray, table) {
 function generateFooter(table) {
   tfoot = document.createElement('tfoot');
   tfoot.setAttribute('style', 'color: #990000');
-  tfoot.innerHTML = '';
   //generates an array with the totals for any given hour
   var row = document.createElement('tr');
   for (var i = 0; i < times.length; i++) {
@@ -167,6 +166,8 @@ addStore.addEventListener('submit',
       var newStore = new Store(location, minCust, maxCust, aveCookies);
       newStore.render(tbody, storeMax);
       addStore.reset();
+      // re-does the total
+      tfoot.innerHTML = '';
       generateFooter(table);
     }
   }
