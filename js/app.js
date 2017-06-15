@@ -1,9 +1,11 @@
 'use strict';
 
 // array of all the stores, will be added via construction
-var storeNames = [];
+var storeLocations = [];
 var tbody;
 var times = ['', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', 'Location Total:'];
+var storeMax = 0;
+var totalMax = 0;
 
 // ignore the linter issues, functions are called via for loop
 var pike = new Store('1st and Pike', 23, 65, 6.3);
@@ -13,25 +15,24 @@ var capitol = new Store('Capitol Hill', 20, 38, 2.3);
 var alki = new Store('Alki', 2, 16, 4.6);
 var stores = [pike, seatac, seattleCenter, capitol, alki];
 // calculates the maximum number of cookies sold per day
-var storeMax = 0;
-var totalMax = 0;
 
-function Store (name, min, max, ave) {
-  this.name = name;
-  storeNames.push(this.name.toLowerCase());
+function Store (location, min, max, ave) {
+  this.location = location;
+  storeLocations.push(this.location.toLowerCase());
   this.min = min;
   this.max = max;
   this.ave = ave;
-  // totalMax += this.max * this.ave;
-  // if (this.max * this.ave > storeMax) {
-  //   storeMax = (this.max * this.ave);
-  // }
-  // savedLog will be set at the end
+  this.hourlyMax = this.max * this.ave;
+  totalMax += this.hourlyMax;
+  if (this.hourlyMax > storeMax) {
+    storeMax = (this.max * this.ave);
+  }
+  //savedLog will be set at the end
   this.savedLog = [];
   // newDay is a function that can reset the savedLog if necessary
   this.newDay = function() {
     var total = 0;
-    this.savedLog = [this.name];
+    this.savedLog = [this.location];
     for (var i = 0; i < 14; i++) {
       var sale = Math.round((Math.random() * (this.max - this.min) + this.min) * this.ave);
       this.savedLog.push(sale);
@@ -74,18 +75,7 @@ Store.prototype.render = function(tbody, maximum) {
   tbody.appendChild(row);
 };
 
-
-//this is necessary to create a color meter later on
-for (var i = 0; i < stores.length; i++) {
-  // this is to find the individual store with the highest sales potential
-  if (stores[i].max * stores[i].ave > storeMax) {
-    storeMax = stores[i].max * stores[i].ave;
-  }
-  // this will find the maximum sales potential for all stores combined
-  totalMax += stores[i].max * stores[i].ave;
-}
-totalMax = Math.round(totalMax);
-
+console.log(totalMax, storeMax);
 
 
 //this is where we start the html portion
@@ -100,7 +90,7 @@ generateHeader(times, table);
 
 // renders individual stores
 tbody = document.createElement('tbody');
-for (i = 0; i < stores.length; i++) {
+for (var i = 0; i < stores.length; i++) {
   stores[i].render(tbody, storeMax);
 };
 table.appendChild(tbody);
@@ -139,7 +129,7 @@ function generateFooter(table, maximum) {
     cell.appendChild(span);
     if (0 < i && i < 15) {
       var success = totals[i] / maximum;
-      cell.setAttribute('style', 'background-color: rgba(250, 128, 114, ' + success + ')');
+      cell.setAttribute('style', 'background-color: rgba(255, 100, 80, ' + success + ')');
       var div = document.createElement('div');
       cell.appendChild(div);
       var img = document.createElement('img');
@@ -165,7 +155,7 @@ addStore.addEventListener('submit',
     var minCust = event.target.minCust.value;
     var maxCust = event.target.maxCust.value;
     var aveCookies = event.target.aveCookies.value;
-    if (storeNames.indexOf(location.toLowerCase()) > -1) {
+    if (storeLocations.indexOf(location.toLowerCase()) > -1) {
       alert('That\'s already a store!');
     } else if (minCust > maxCust) {
       alert('Your minimum is greater than your maximum!');
