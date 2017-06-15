@@ -133,7 +133,7 @@ function generateFooter(table) {
       cell.appendChild(div);
       var img = document.createElement('img');
       img.setAttribute('src', 'images/salmon-small.png');
-      img.setAttribute('width', 60 * Math.pow(success, .75));
+      img.setAttribute('width', 60 * Math.pow(success, .7));
       div.appendChild(img);
       cell.appendChild(div);
     }
@@ -142,33 +142,3 @@ function generateFooter(table) {
   tfoot.appendChild(row);
   table.appendChild(tfoot);
 };
-
-
-var addStore = document.getElementById('addStore');
-
-
-addStore.addEventListener('submit',
-  function (event) {
-    event.preventDefault();
-    var location = event.target.location.value;
-    var minCust = event.target.minCust.value;
-    var maxCust = event.target.maxCust.value;
-    var aveCookies = event.target.aveCookies.value;
-    if (storeLocations.indexOf(location.toLowerCase()) > -1) {
-      alert('That\'s already a store!');
-    } else if (minCust > maxCust) {
-      alert('Your minimum is greater than your maximum!');
-    } else if (minCust < 0 || aveCookies < 0) {
-      alert('You cannot have negative numbers');
-    } else if (maxCust == 0 && aveCookies == 0) {
-      alert('Imagine that you have zero cookies and you split them evenly among zero friends. How many cookies does each person get\? See\? It doesn\'t make sense. And Cookie Monster is sad that there are no cookies, and you are sad that you have no friends.');
-    } else {
-      var newStore = new Store(location, minCust, maxCust, aveCookies);
-      newStore.render(tbody, storeMax);
-      addStore.reset();
-      // re-does the total
-      tfoot.innerHTML = '';
-      generateFooter(table);
-    }
-  }
-);
