@@ -66,13 +66,25 @@ td {
 }
 
 .location {
-  box-sizing: border;
-  width: 20%;
+  box-sizing: border-box;
+  width: 18%;
   border: 10px;
+  text-align: center;
   display: inline-block;
+}
+
+#location_bar {
+  box-sizing: border-box;
+  border: 0px;
+  padding: 0px;
+  margin: 0px;
 }
 
 .clearfix {
   overflow: auto;
   zoom: 1;
+}
+
+.flickr {
+
 }
