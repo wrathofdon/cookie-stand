@@ -2,6 +2,10 @@ body {
   background-color: salmon;
 }
 
+* {
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+}
+
 th {
   min-width: 60px;
 }
