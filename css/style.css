@@ -48,10 +48,19 @@ td {
 
 #fishheads {
   background-image: url("../assets/family.jpg");
-    background-size: 100%;
-    width: 38%;
-    float: left;
-    overflow: auto;
+  background-size: 100%;
+}
+
+.twocols {
+  width: 38%;
+  float: left;
+  margin-top: 10px;
+}
+
+.onecol {
+  width: 19%;
+  float: left;
+  margin-top: 10px;
 }
 
 /* https://stackoverflow.com/questions/13955163/imitating-a-blink-tag-with-css3-animations */
@@ -85,7 +94,6 @@ td {
   border: 0px;
   padding: 0px;
   margin: 0px;
-  text-align: center;
 }
 
 .clearfix {
@@ -99,19 +107,7 @@ td {
   margin: 0px;
 }
 
-.whiteBackground {
-  background-color: white;
-}
-
-#fishLeft {
-  width: 54%;
-  background-color: white;
-  display: inline-block;
-}
-
-
-#fishRight {
-  width: 44%;\
+.whiteInline {
   background-color: white;
   display: inline-block;
 }
