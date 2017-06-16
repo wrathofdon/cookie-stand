@@ -1,5 +1,5 @@
 body {
-  background-color: salmon;
+  background-color: white;
 }
 
 header {
@@ -42,9 +42,7 @@ td {
   color: salmon;
 }
 
-.whiteBackground {
-  background-color: white;
-}
+
 
 #fishheads {
   background-image: url("../assets/family.jpg");
@@ -107,7 +105,6 @@ td {
   margin: 0px;
 }
 
-.whiteInline {
-  background-color: white;
+.inline {
   display: inline-block;
 }
