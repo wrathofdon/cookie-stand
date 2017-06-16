@@ -1,9 +1,13 @@
 body {
-  background-color: salmon;
+  background-color: white;
+}
+
+header {
+  background-color: #66ffcc;
 }
 
 * {
-  font-family: 'Yanone Kaffeesatz', sans-serif;
+  font-family: 'Yanone Kaffeesatz', "Comic Sans MS", sans-serif;
 }
 
 th {
@@ -18,4 +22,89 @@ td {
   border: 1px solid salmon;
   text-align: center;
   height: 50px;
+}
+
+#bettercall {
+  font-size: 60px;
+  text-align: center;
+  line-height: .5;
+}
+
+#moncookies {
+  font-size: 36px;
+  text-align: center;
+  line-height: .5;
+  font-style: italic;
+}
+
+
+.salmonText {
+  color: salmon;
+}
+
+
+
+#fishheads {
+  background-image: url("../assets/family.jpg");
+  background-size: 100%;
+}
+
+.twocols {
+  width: 38%;
+  float: left;
+  margin-top: 10px;
+}
+
+.onecol {
+  width: 19%;
+  float: left;
+  margin-top: 10px;
+}
+
+/* https://stackoverflow.com/questions/13955163/imitating-a-blink-tag-with-css3-animations */
+.blink {
+  animation: blink-animation 2s steps(2, start) infinite;
+  -webkit-animation: blink-animation 2s steps(2, start) infinite;
+}
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+
+.location {
+  box-sizing: border-box;
+  width: 19%;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+  text-align: center;
+  display: inline-block;
+}
+
+#location_bar {
+  box-sizing: border-box;
+  border: 0px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.clearfix {
+  overflow: auto;
+  zoom: 1;
+}
+
+.wideImage {
+  width: 100%;
+  border: 0px;
+  margin: 0px;
+}
+
+.inline {
+  display: inline-block;
 }
