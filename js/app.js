@@ -151,9 +151,9 @@ addStore.addEventListener('submit',
   function (event) {
     event.preventDefault();
     var location = event.target.location.value;
-    var minCust = event.target.minCust.value;
-    var maxCust = event.target.maxCust.value;
-    var aveCookies = event.target.aveCookies.value;
+    var minCust = parseInt(event.target.minCust.value);
+    var maxCust = parseInt(event.target.maxCust.value);
+    var aveCookies = parseFloat(event.target.aveCookies.value);
     if (storeLocations.indexOf(location.toLowerCase()) > -1) {
       alert('That\'s already a store!');
     } else if (minCust > maxCust) {
